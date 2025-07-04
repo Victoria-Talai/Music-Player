@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./jquery-ui-1.14.1.custom/jquery-ui.css" />
+    <link
+      rel="stylesheet"
+      href="./jquery-ui-1.14.1.custom/jquery-ui.structure.css" />
+    <link
+      rel="stylesheet"
+      href="./jquery-ui-1.14.1.custom/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <title>Music player</title>
+  </head>
+  <body>
+    <div id="home" class="container">
+      <div class="collection">
+        <h1>Playlist</h1>
+        <div class="search flexbox">
+          <input
+            type="text"
+            id="search"
+            class="search-input"
+            autocomplete="off"
+            list="song-list"
+            placeholder="Search for a song..." />
+          <datalist id="song-list"></datalist>
+        </div>
+        <p id="index" class="index"></p>
+        <div class="musicbox">
+          <ul id="track-list"></ul>
+        </div>
+      </div>
+      <div class="playbox">
+        <div class="controller">
+          <h4>Next:</h4>
+          <h4 id="upcoming-song-name">Upcoming song name</h4>
+          <div class="songs">
+            <audio id="song"></audio>
+            <div id="circle-bg" class="circle">
+              <div id="circle-sm" class="circle2">
+                <img src="" alt="" id="cover" class="fluid-img" />
+              </div>
+            </div>
+            <div class="controls">
+              <h2 id="song-name">Travel Love Beats</h2>
+              <div class="progress-control">
+                <span id="current-time">0:00</span>
+                <input type="range" id="progress" value="0" min="0" max="100" />
+                <span id="duration-time">0:00</span>
+                <div id="progress-tooltip" class="tooltip">0:00</div>
+              </div>
+
+              <img
+                src="./img/rewind.png"
+                alt="Rewind"
+                id="backward"
+                class="media-btn" />
+              <img src="./img/play.png" id="play-stop" class="media-btn" />
+              <img
+                src="./img/next.png"
+                alt="Next"
+                id="forward"
+                class="media-btn" />
+            </div>
+            <div class="volume-controls">
+              <img src="./img/volume-2.svg" alt="" id="volume-img" />
+              <input
+                type="range"
+                name=""
+                id="volume"
+                min="0"
+                max="100"
+                value="90" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./jquery/jquery-3.7.1.js"></script>
+    <script src="./jquery-ui-1.14.1.custom/jquery-ui.js"></script>
+    <script>
+      let songs = [
+        {
+          name: "Fairytale",
+          path: "./audio/Alexander Rybak - Fairytale (Lyrics) Norway 🇳🇴 Eurovision Winner 2009 [1rVY08gRGmA].mp3",
+          artist: "Alexander Rybak",
+          album: "./img/fairy tale.png",
+          dataIndex: 0,
+          duration: 182,
+        },
+        {
+          name: "Diamond",
+          path: "./audio/Rihanna - Diamonds [0-p5EbAsxUM].mp3",
+          artist: "Rihanna",
+          album: "./img/Diamonds.png",
+          dataIndex: 1,
+          duration: 225,
+        },
+        {
+          name: "Still With You",
+          path: "./audio/Still With You [BksBNbTIoPE].mp3",
+          artist: "Jungkook",
+          album: "./img/Jungkook - Still with you.png",
+          dataIndex: 2,
+          duration: 239,
+        },
+        {
+          name: "Hold on",
+          path: "./audio/Chord Overstreet - Hold On (Lyric Video) [8ofCZObsnOo].mp3",
+          artist: "Chold Overstreet",
+          album: "./img/Hold on.png",
+          dataIndex: 3,
+          duration: 200,
+        },
+        {
+          name: "Trouble Make",
+          path: "./audio/午夜恰恰 (Midnight Cha Cha) + Trouble Maker - 虞书欣 (Esther Yu), 林一 (Lin Yi)【你好星期六现场 Hello Saturday Live】 [Mpz_8zlgF-0].mp3",
+          artist: "Esther Yu",
+          album: "./img/Trouble maker.png",
+          dataIndex: 4,
+          duration: 95,
+        },
+        {
+          name: "April Jai",
+          path: "./audio/Morally Grey - April Jai (Lyric Video) [oh-KugAlddI].mp3",
+          artist: "Morally Grey",
+          album: "./img/7 Years.png",
+          dataIndex: 5,
+          duration: 162,
+        },
+        {
+          name: "Eyes Wide Open",
+          path: "./audio/Sabrina Carpenter - Eyes Wide Open (Official Video) [R4VJyfCcOJc].mp3",
+          artist: "Sabrina Carpenter",
+          album: "./img/Sabrina Carpenter eyer wide open.png",
+          dataIndex: 5,
+          duration: 215,
+        },
+        {
+          name: "Falling You",
+          path: "./audio/Falling You - Chen Feiyu (陈飞宇) & Zhang Jingyi (张婧仪)《Lighter & Princess OST》《点燃我温暖你》Lyrics [qWsgbUvt3TA].mp3",
+          artist: "Chen Feiyu",
+          album: "./img/King & Knight.png",
+          dataIndex: 6,
+          duration: 232,
+        },
+        {
+          name: "The first time",
+          path: "./audio/Damiano David - The First Time (Lyrics) [zKEKXCLT6yg].mp3",
+          artist: "Damiano David",
+          album: "./img/the first time.jpg",
+          dataIndex: 7,
+          duration: 219,
+        },
+        {
+          name: "Just My Type",
+          path: "./audio/Just My Type - Kyle Hume (Official Lyric Video) [icvplqUkleg].mp3",
+          artist: "Kyle Hume",
+          album: "./img/Just My Type.png",
+          dataIndex: 8,
+          duration: 164,
+        },
+        {
+          name: "Love Me Like You Do",
+          path: "./audio/Ellie Goulding - Love Me Like You Do (Lyrics) [uWoYIOcOpwU].mp3",
+          artist: "Ellie Goulding",
+          album: "./img/Another Love.png",
+          dataIndex: 9,
+          duration: 239,
+        },
+        {
+          name: "Light Red",
+          path: "./audio/[Eng_Pinyin] _Light Red_ - Chen Xueran _ Lighter and Princess OST 点燃我, 温暖你 [2sCNm8KO2AU].mp3",
+          artist: "Lighter and Princess OST",
+          album: "./img/King & Knight.png",
+          dataIndex: 10,
+          duration: 226,
+        },
+        {
+          name: "TV",
+          path: "./audio/MICO - TV [official lyric video] [_wQjZMk78vk].mp3",
+          artist: "Mico",
+          album: "./img/TV.png",
+          dataIndex: 11,
+          duration: 172,
+        },
+        {
+          name: "King & Knight",
+          path: "./audio/King & Knight (国王与骑士) - Chen Xueran (陈雪燃)《Lighter & Princess OST》《点燃我温暖你》Lyrics [f39hSw4yjYU].mp3",
+          artist: "Chen Xueran",
+          album: "./img/King & Knight.png",
+          dataIndex: 12,
+          duration: 202,
+        },
+        {
+          name: "La La La",
+          path: "./audio/Stray Kids _락 (樂) (LALALALA)_ M_V [dBDkYofMUs4].mp3",
+          artist: "Stray Kids",
+          album: "./img/La la la.png",
+          dataIndex: 13,
+          duration: 199,
+        },
+        {
+          name: "Rainkissed Fade",
+          path: "./audio/廖不起〈雨愛〉網劇《雨愛千金》主題曲 Rainkissed Fate OST [N-B1_KGCF9I].mp3",
+          artist: "Fade",
+          album: "./img/Dandelions rezerva.png",
+          dataIndex: 14,
+          duration: 220,
+        },
+        {
+          name: "Another Love",
+          path: "./audio/Tom Odell - Another Love (Lyrics) [ixRLjjTRczE].mp3",
+          artist: "Tom Odell",
+          album: "./img/GODS.png",
+          dataIndex: 15,
+          duration: 212,
+        },
+      ];
+    </script>
+    <script src="./js/song.js"></script>
+  </body>
+</html>
